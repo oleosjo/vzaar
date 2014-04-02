@@ -7,6 +7,14 @@ A little cleanup and repackaging of the official Vzaar PHP wrapper.
 [The original API wrapper can be found here](https://code.google.com/p/vzaar/)
 
 #Install
-Add ``` "andheiberg/vzaar": "dev-master" ``` to composer.json
-
-For laravel add ``` 'Andheiberg\Vzaar\VzaarServiceProvider' ``` to app/config/app.php under providers and ``` 'Vzaar' => 'Andheiberg\Vzaar\Facades\Vzaar' ``` to app/config/app.php under aliases.
+Add ```
+"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/oleosjo/vzaar.git"
+        }
+    ],
+"require": {
+    "andheiberg/vzaar": "dev-master"
+}
+     ``` to composer.json

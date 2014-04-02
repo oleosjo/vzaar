@@ -1,6 +1,6 @@
 <?php namespace Andheiberg\Vzaar\Utils\OAuth;
 
-class SignatureMethod_PLAINTEXT extends SignatureMethod {
+class SignatureMethodPlainText extends SignatureMethod {
 	public function get_name() {
 		return "PLAINTEXT";
 	}

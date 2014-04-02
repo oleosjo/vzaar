@@ -3,7 +3,7 @@
 use Andheiberg\Vzaar\Utils\OAuth\Consumer as OAuthConsumer;
 use Andheiberg\Vzaar\Utils\OAuth\Token as OAuthToken;
 use Andheiberg\Vzaar\Utils\OAuth\Request as OAuthRequest;
-use Andheiberg\Vzaar\Utils\OAuth\SignatureMethod_HMAC_SHA1 as OAuthSignatureMethod_HMAC_SHA1;
+use Andheiberg\Vzaar\Utils\OAuth\SignatureMethodShaHMAC;
 use Andheiberg\Vzaar\Utils\HttpRequest as HttpRequest;
 use Andheiberg\Vzaar\Utils\XMLToArray;
 
@@ -230,7 +230,7 @@ class Vzaar
 		$xmlObj = new XMLToArray($reply, array(), array(), true, false);
 		$arrObj = $xmlObj->getArray();
 		$key    = explode('/', $arrObj['PostResponse']['Key']);
-		
+
 		return $key[sizeOf($key) - 2];
 	}
 
@@ -315,7 +315,7 @@ class Vzaar
 		$data  = '<?xml version="1.0" encoding="UTF-8"?><vzaar-api><_method>put</_method><video>';
 		$data .= '<title>' . $title . '</title>';
 		$data .= '<description>' . $description . '</description>';
-		
+
 		if ($private)
 		{
 			$data .= '<private>' . $private . '</private>';
@@ -324,7 +324,7 @@ class Vzaar
 		{
 			$data .= '<seo_url>' . $seoUrl . '</seo_url>';
 		}
-		
+
 		$data .= '</video></vzaar-api>';
 
 		$c = new HttpRequest($url);
@@ -394,8 +394,10 @@ class Vzaar
 		$token = new OAuthToken($this->secret, $this->token);
 		$req = OAuthRequest::from_consumer_and_token($consumer, $token, $method, $url);
 		$req->set_parameter('oauth_signature_method', 'HMAC-SHA1');
-		$req->set_parameter('oauth_signature', $req->build_signature(new OAuthSignatureMethod_HMAC_SHA1, $consumer, $token));
-		
+
+		$sig = new SignatureMethodShaHMAC();
+		$req->set_parameter('oauth_signature', $req->build_signature($sig, $consumer, $token));
+
 		return $req;
 	}
 

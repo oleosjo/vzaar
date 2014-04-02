@@ -1,6 +1,6 @@
 <?php namespace Andheiberg\Vzaar\Utils\OAuth;
 
-class SignatureMethod_RSA_SHA1 extends SignatureMethod {
+class SignatureMethodShaRSA extends SignatureMethod {
 	public function get_name() {
 		return "RSA-SHA1";
 	}

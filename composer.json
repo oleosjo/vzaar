@@ -7,6 +7,10 @@
             "name": "Andreas Heiberg",
             "email": "heibergandreas@gmail.com",
             "homepage": "http://andreas-heiberg.com/"
+        },
+        {
+            "name" : "Jonathan McDill",
+            "email": "oleosjo@gmail.com"
         }
     ],
     "keywords": ["vzaar"],

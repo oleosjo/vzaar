@@ -1,6 +1,6 @@
 <?php namespace Andheiberg\Vzaar\Utils\OAuth;
 
-class SignatureMethod_HMAC_SHA1 extends SignatureMethod {
+class SignatureMethodShaHMAC extends SignatureMethod {
 	function get_name() {
 		return "HMAC-SHA1";
 	}
