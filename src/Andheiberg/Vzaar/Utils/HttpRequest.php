@@ -29,9 +29,9 @@ class HttpRequest {
         $this->c = curl_init($this->url);
     }
 
+
     function send($data=null, $filepath=null) {
         if (count($this->headers) > 0) {
-            curl_setopt($this->c, CURLOPT_HEADER, false);
             curl_setopt($this->c, CURLOPT_HTTPHEADER, $this->headers);
         }
 
@@ -50,8 +50,8 @@ class HttpRequest {
 
         if ($this->uploadMode) {
             //curl_setopt($this->c, CURLOPT_URL, $filepath);
-			//curl_setopt($this->c, CURLOPT_UPLOAD, true);
-			curl_setopt($this->c, CURLOPT_POST, true);
+            //curl_setopt($this->c, CURLOPT_UPLOAD, true);
+            curl_setopt($this->c, CURLOPT_POST, true);
             $fp = fopen($filepath, 'r');
             curl_setopt($this->c, CURLOPT_INFILE, $fp);
             curl_setopt($this->c, CURLOPT_INFILESIZE, filesize($filepath));

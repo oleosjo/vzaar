@@ -198,7 +198,7 @@ class Vzaar
 	 *
 	 *
 	 * @param  string $path
-	 * @return string GUID of the file uploaded
+	 * return string GUID of the file uploaded
 	 */
 	public function uploadVideo($path)
 	{
@@ -208,7 +208,7 @@ class Vzaar
 
 		$req->method     = 'POST';
 		$req->uploadMode = true;
-		$req->verbose    = false;
+		$req->verbose    = true;
 		$req->useSsl     = true;
 
 		array_push($req->headers, 'User-Agent: Vzaar API Client');
@@ -227,11 +227,22 @@ class Vzaar
 		);
 
 		$reply  = $req->send($s3Headers, $path);
-		$xmlObj = new XMLToArray($reply, array(), array(), true, false);
-		$arrObj = $xmlObj->getArray();
-		$key    = explode('/', $arrObj['PostResponse']['Key']);
 
-		return $key[sizeOf($key) - 2];
+		if ($reply){
+			list($header, $body) = explode("\r\n\r\n", $reply, 2);
+			$body = substr($body, 0, -1);
+
+			$xml = simplexml_load_string($body);
+
+			$key_addr = $xml->Key;
+			$key = explode('/', $key_addr);
+			$guid = $key[sizeOf($key) - 2];
+
+		} else {
+			throw new \Exception("Problem getting a response from Vzaar", 1);
+		}
+
+		return $guid;
 	}
 
 	/**
@@ -377,8 +388,13 @@ class Vzaar
 		array_push($c->headers, 'Connection: close');
 		array_push($c->headers, 'Content-Type: application/xml');
 
-		$apireply = new XMLToArray($c->send($data));
-		return $apireply->_data[0]["vzaar-api"]["video"];
+		$reply = $c->send($data);
+
+		$xml = simplexml_load_string($reply);
+
+		$video_id = $xml->video;
+
+		return $video_id;
 	}
 
 	/**
