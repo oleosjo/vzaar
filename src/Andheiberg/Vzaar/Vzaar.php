@@ -90,7 +90,7 @@ class Vzaar
 
 		$response = json_decode($c->send());
 
-		return $response->vzaar_api->test->login;
+		return $response;
 	}
 
 	/**
@@ -228,15 +228,22 @@ class Vzaar
 
 		$reply  = $req->send($s3Headers, $path);
 
+		// die(var_dump($reply));
+
 		if ($reply){
-			list($header, $body) = explode("\r\n\r\n", $reply, 2);
+			list($header, $body) = explode("<?xml", $reply, 2);
 			$body = substr($body, 0, -1);
+			$body = "<?xml".$body;
+			preg_replace('[^0-9a-zA-Z"= .<>:/?-]', '', $body);
 
-			$xml = simplexml_load_string($body);
+			// die(var_dump($body));
+			if ($body != '') {
+				$xml = simplexml_load_string($body);
 
-			$key_addr = $xml->Key;
-			$key = explode('/', $key_addr);
-			$guid = $key[sizeOf($key) - 2];
+				$key_addr = $xml->Key;
+				$key = explode('/', $key_addr);
+				$guid = $key[sizeOf($key) - 2];
+			}
 
 		} else {
 			throw new \Exception("Problem getting a response from Vzaar", 1);
@@ -389,6 +396,8 @@ class Vzaar
 		array_push($c->headers, 'Content-Type: application/xml');
 
 		$reply = $c->send($data);
+
+		// die(var_dump($reply));
 
 		$xml = simplexml_load_string($reply);
 
